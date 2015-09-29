@@ -1,2 +1,1 @@
-# studenten
-Liste aller Studenten (GitHub-Übungsrepository)
+# Liste aller Studenten (GitHub-Übungsrepository)
