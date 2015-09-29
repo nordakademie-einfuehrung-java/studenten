@@ -1,4 +1,5 @@
 name=Björn Kimminich
+foto=http://de.gravatar.com/bkimminich
 firma=Kuehne+Nagel
 matrikelnummer=i99a19
 vorkenntnisse=pascal,delphi,smalltalk,java,javascript,groovy
