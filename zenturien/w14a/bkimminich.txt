@@ -1,0 +1,4 @@
+name=Björn Kimminich
+firma=Kuehne+Nagel
+matrikelnummer=i99a19
+vorkenntnisse=pascal,delphi,smalltalk,java,javascript,groovy
