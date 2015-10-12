@@ -1,0 +1,26 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+repositories {
+jcenter()
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+		}
+	}
+}
+
+dependencies {
+    compile 'org.yaml:snakeyaml:1.16'
+}
+
+mainClassName = 'StudentenAuswertung'
