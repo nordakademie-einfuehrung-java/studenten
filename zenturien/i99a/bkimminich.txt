@@ -1,4 +1,0 @@
-name=Björn Kimminich
-foto=http://de.gravatar.com/bkimminich
-firma=Kuehne+Nagel
-vorkenntnisse=pascal,delphi,smalltalk,java,javascript,groovy
