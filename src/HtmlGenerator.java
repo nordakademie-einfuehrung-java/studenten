@@ -1,3 +1,7 @@
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.Map;
+
 public class HtmlGenerator {
 
     private StringBuffer html = new StringBuffer();
@@ -9,11 +13,14 @@ public class HtmlGenerator {
 
     public void openHtmlPage(String title) {
         html.append("<html><title>").append(title).append("</title>");
+        html.append("<head>");
+        html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>");
+        html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css'></head>");
         html.append("<body>");
     }
 
     public void openTable(String... headers) {
-        html.append("<table>");
+        html.append("<table class='table table-striped'>");
         html.append("<tr>");
         for (String header : headers) {
             html.append("<th>").append(header).append("</th>");
@@ -21,7 +28,25 @@ public class HtmlGenerator {
         html.append("</tr>");
     }
 
-    public void writeRow(Object... data) {
+    public void writeStudentAsTableRow(Map<String, Object> student, String ymlFilename) {
+        String githubUser = ymlFilename.substring(0, ymlFilename.lastIndexOf("."));
+        String name = String.valueOf(student.get("name"));
+        String foto = String.valueOf(student.get("foto"));
+        String firma = String.valueOf(student.get("firma"));
+        String vorkenntnisse = String.valueOf(student.get("vorkenntnisse"));
+
+        name = name + "<br><a href='https://github.com/" + githubUser + "'>@" + githubUser + "</a>";
+        foto = "<img src='" + foto + "' width='100' class='img-thumbnail'>";
+        vorkenntnisse = writeYmlListAsUnorderedList(vorkenntnisse);
+
+        writeRow(foto, name, firma, vorkenntnisse);
+    }
+
+    private String writeYmlListAsUnorderedList(String vorkenntnisse) {
+        return vorkenntnisse; // TODO Return <ul>...</ul> instead
+    }
+
+    private void writeRow(Object... data) {
         html.append("<tr>");
         for (Object d : data) {
             if (d != null) {
@@ -42,8 +67,13 @@ public class HtmlGenerator {
     }
 
     public void generateFile() {
-        System.out.println("Filename: " + filename); // TODO Implement real file creation
-        System.out.println("Content: " + html); // TODO Implement writing HTML into real file
+        System.out.println("Filename: " + filename);
+        System.out.println("Content: " + html);
+        try (PrintStream ps = new PrintStream(filename)) {
+            ps.println(html);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }
