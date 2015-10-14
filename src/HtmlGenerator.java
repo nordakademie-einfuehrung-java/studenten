@@ -1,14 +1,19 @@
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HtmlGenerator {
 
     private StringBuffer html = new StringBuffer();
     private String filename;
+    private Map<String, Integer> preKnowledge = new HashMap<>();
 
     public HtmlGenerator(String filename) {
         this.filename = filename;
+        preKnowledge.put("keine", 0);
     }
 
     public void openHtmlPage(String title) {
@@ -33,21 +38,24 @@ public class HtmlGenerator {
         String name = String.valueOf(student.get("name"));
         String foto = String.valueOf(student.get("foto"));
         String firma = String.valueOf(student.get("firma"));
-        String vorkenntnisse = String.valueOf(student.get("vorkenntnisse"));
+        ArrayList<String> vorkenntnisse = (ArrayList<String>) (student.get("vorkenntnisse"));
 
         name = name + "<br><a href='https://github.com/" + githubUser + "'>@" + githubUser + "</a>";
         foto = "<img src='" + foto + "' width='100' class='img-thumbnail'>";
-        vorkenntnisse = renderYmlListAsUnorderedList(vorkenntnisse);
 
-        writeRow(foto, name, firma, vorkenntnisse);
+        writeRow(foto, name, firma, asUnorderedList(vorkenntnisse));
     }
 
-    private String renderYmlListAsUnorderedList(String vorkenntnisse) {
-        vorkenntnisse = vorkenntnisse.replace("[", "<ul><li>");
-        vorkenntnisse = vorkenntnisse.replaceAll(", ", "</li><li>");
-        vorkenntnisse = vorkenntnisse.replace("]", "</li></ul>");
-        vorkenntnisse = vorkenntnisse.replace("<ul><li></li></ul>", "");
-        return vorkenntnisse;
+    private String asUnorderedList(ArrayList<String> vorkenntnisse) {
+        StringBuffer ul = new StringBuffer();
+        if (vorkenntnisse != null && !vorkenntnisse.isEmpty()) {
+            ul.append("<ul>");
+            for (String vorkenntnis : vorkenntnisse) {
+                ul.append("<li>").append(vorkenntnis).append("</li>");
+            }
+            ul.append("</ul>");
+        }
+        return ul.toString();
     }
 
     private void writeRow(Object... data) {
@@ -80,4 +88,17 @@ public class HtmlGenerator {
         }
     }
 
+    public Map<String, Integer> getPreKnowledge() {
+        return preKnowledge;
+    }
+
+    public void writePreknowledgeProgressBars() {
+        html.append("<div class='col-md-4'><div class='panel panel-default'>");
+        html.append("<div class='panel-heading'><h3 class='panel-title'>Verteilung der Vorkenntnisse in der Zenturie</h3></div><div class='panel-body'>");
+        preKnowledge.entrySet().stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .forEach(e -> html.append(e.getKey() + " <span class='badge'>" + e.getValue() + "</span><br>"));
+        html.append("</div></div></div>");
+
+    }
 }

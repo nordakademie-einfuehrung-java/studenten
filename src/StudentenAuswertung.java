@@ -3,6 +3,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +18,20 @@ public class StudentenAuswertung {
 
                 Yaml yaml = new Yaml();
                 HtmlGenerator generator;
+
+                private void accumulatePreknowledge(ArrayList<String> vorkenntnisse) {
+                    Map<String, Integer> preKnowledge = generator.getPreKnowledge();
+                    if (vorkenntnisse != null && !vorkenntnisse.isEmpty()) {
+                        for (String vorkenntnis : vorkenntnisse) {
+                            if (!preKnowledge.containsKey(vorkenntnis.toLowerCase())) {
+                                preKnowledge.put(vorkenntnis.toLowerCase(), 0);
+                            }
+                            preKnowledge.put(vorkenntnis.toLowerCase(), preKnowledge.get(vorkenntnis.toLowerCase())+1);
+                        }
+                    } else {
+                        preKnowledge.put("keine", preKnowledge.get("keine")+1);
+                    }
+                }
 
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
@@ -41,6 +56,7 @@ public class StudentenAuswertung {
                         Map<String, Object> student = (Map<String, Object>) yaml.load(stream);
                         System.out.println(file.toString() + " -> " + student);
                         generator.writeStudentAsTableRow(student, file.getFileName().toString());
+                        accumulatePreknowledge((ArrayList<String>) student.get("vorkenntnisse"));
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -52,8 +68,12 @@ public class StudentenAuswertung {
 
                 @Override
                 public FileVisitResult postVisitDirectory(Path dir, IOException e) {
-                    generator.closeCurrentTable();
-                    generator.closeCurrentHtmlPage();
+                    if (!dir.toString().equals("zenturien")) {
+                        generator.closeCurrentTable();
+                        generator.writePreknowledgeProgressBars();
+                        generator.closeCurrentHtmlPage();
+                        System.out.println("Vorkenntnisse: " + generator.getPreKnowledge());
+                    }
                     return FileVisitResult.CONTINUE;
                 }
 
