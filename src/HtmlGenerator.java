@@ -20,7 +20,7 @@ public class HtmlGenerator {
     }
 
     public void openTable(String... headers) {
-        html.append("<table class='table table-striped'>");
+        html.append("<div class='col-md-6'><table class='table table-striped'>");
         html.append("<tr>");
         for (String header : headers) {
             html.append("<th>").append(header).append("</th>");
@@ -37,13 +37,17 @@ public class HtmlGenerator {
 
         name = name + "<br><a href='https://github.com/" + githubUser + "'>@" + githubUser + "</a>";
         foto = "<img src='" + foto + "' width='100' class='img-thumbnail'>";
-        vorkenntnisse = writeYmlListAsUnorderedList(vorkenntnisse);
+        vorkenntnisse = renderYmlListAsUnorderedList(vorkenntnisse);
 
         writeRow(foto, name, firma, vorkenntnisse);
     }
 
-    private String writeYmlListAsUnorderedList(String vorkenntnisse) {
-        return vorkenntnisse; // TODO Return <ul>...</ul> instead
+    private String renderYmlListAsUnorderedList(String vorkenntnisse) {
+        vorkenntnisse = vorkenntnisse.replace("[", "<ul><li>");
+        vorkenntnisse = vorkenntnisse.replaceAll(", ", "</li><li>");
+        vorkenntnisse = vorkenntnisse.replace("]", "</li></ul>");
+        vorkenntnisse = vorkenntnisse.replace("<ul><li></li></ul>", "");
+        return vorkenntnisse;
     }
 
     private void writeRow(Object... data) {
@@ -59,7 +63,7 @@ public class HtmlGenerator {
     }
 
     public void closeCurrentTable() {
-        html.append("</table>");
+        html.append("</table></div>");
     }
 
     public void closeCurrentHtmlPage() {
