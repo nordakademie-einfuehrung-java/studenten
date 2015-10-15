@@ -9,7 +9,7 @@ public class HtmlGenerator {
 
     private Zenturie zenturie;
     private String filename;
-    private StringBuffer html = new StringBuffer();
+    private StringBuilder html = new StringBuilder();
     private Map<String, Integer> preKnowledge = new HashMap<>();
 
     public HtmlGenerator(Zenturie zenturie) {
@@ -54,12 +54,12 @@ public class HtmlGenerator {
         writeRow(foto, name, student.getFirma(), asUnorderedList(student.getVorkenntnisse()));
     }
 
-    private String asUnorderedList(ArrayList<String> vorkenntnisse) {
-        StringBuffer ul = new StringBuffer();
-        if (vorkenntnisse != null && !vorkenntnisse.isEmpty()) {
+    private String asUnorderedList(ArrayList<String> items) {
+        StringBuilder ul = new StringBuilder();
+        if (items != null && !items.isEmpty()) {
             ul.append("<ul>");
-            for (String vorkenntnis : vorkenntnisse) {
-                ul.append("<li>").append(vorkenntnis).append("</li>");
+            for (String item : items) {
+                ul.append("<li>").append(item).append("</li>");
             }
             ul.append("</ul>");
         }
@@ -89,6 +89,7 @@ public class HtmlGenerator {
     private void generateFile() {
         try (PrintStream ps = new PrintStream(filename)) {
             ps.println(html);
+            System.out.println("Generated HTML file " + filename + ": " + html);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
