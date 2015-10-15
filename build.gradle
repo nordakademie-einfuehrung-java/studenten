@@ -23,4 +23,4 @@ dependencies {
     compile 'org.yaml:snakeyaml:1.16'
 }
 
-mainClassName = 'StudentenAuswertung'
+mainClassName = 'de.nordakademie.github.StudentenAuswertung'
