@@ -7,16 +7,31 @@ import java.util.Map;
 
 public class HtmlGenerator {
 
-    private StringBuffer html = new StringBuffer();
+    private Zenturie zenturie;
     private String filename;
+    private StringBuffer html = new StringBuffer();
     private Map<String, Integer> preKnowledge = new HashMap<>();
 
-    public HtmlGenerator(String filename) {
-        this.filename = filename;
+    public HtmlGenerator(Zenturie zenturie) {
+        this.zenturie = zenturie;
         preKnowledge.put("keine", 0);
     }
 
-    public void openHtmlPage(String title) {
+    public void generateZenturienPage() {
+        filename = zenturie.getDirectoryPath().toString() + ".html";
+        openHtmlPage(filename);
+        openTable("Foto", "Name", "Firma", "Vorkenntnisse");
+        zenturie.getStudents().stream().sorted().forEach(s -> {
+            writeStudentAsTableRow(s);
+            accumulatePreknowledge(s.getVorkenntnisse());
+        });
+        closeCurrentTable();
+        writePreknowledgeProgressBars();
+        closeCurrentHtmlPage();
+        generateFile();
+    }
+
+    private void openHtmlPage(String title) {
         html.append("<html><title>").append(title).append("</title>");
         html.append("<head>");
         html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>");
@@ -24,7 +39,7 @@ public class HtmlGenerator {
         html.append("<body>");
     }
 
-    public void openTable(String... headers) {
+    private void openTable(String... headers) {
         html.append("<div class='col-md-6'><table class='table table-striped'>");
         html.append("<tr>");
         for (String header : headers) {
@@ -33,17 +48,10 @@ public class HtmlGenerator {
         html.append("</tr>");
     }
 
-    public void writeStudentAsTableRow(Map<String, Object> student, String ymlFilename) {
-        String githubUser = ymlFilename.substring(0, ymlFilename.lastIndexOf("."));
-        String name = String.valueOf(student.get("name"));
-        String foto = String.valueOf(student.get("foto"));
-        String firma = String.valueOf(student.get("firma"));
-        ArrayList<String> vorkenntnisse = (ArrayList<String>) (student.get("vorkenntnisse"));
-
-        name = name + "<br><a href='https://github.com/" + githubUser + "'>@" + githubUser + "</a>";
-        foto = "<img src='" + foto + "' width='100' class='img-thumbnail'>";
-
-        writeRow(foto, name, firma, asUnorderedList(vorkenntnisse));
+    private void writeStudentAsTableRow(Student student) {
+        String name = student.getName() + "<br><a href='https://github.com/" + student.getGithubUser() + "'>@" + student.getGithubUser() + "</a>";
+        String foto = "<img src='" + student.getFoto() + "' width='100' class='img-thumbnail'>";
+        writeRow(foto, name, student.getFirma(), asUnorderedList(student.getVorkenntnisse()));
     }
 
     private String asUnorderedList(ArrayList<String> vorkenntnisse) {
@@ -70,17 +78,15 @@ public class HtmlGenerator {
         html.append("</tr>");
     }
 
-    public void closeCurrentTable() {
+    private void closeCurrentTable() {
         html.append("</table></div>");
     }
 
-    public void closeCurrentHtmlPage() {
+    private void closeCurrentHtmlPage() {
         html.append("</body></html>");
     }
 
-    public void generateFile() {
-        System.out.println("Filename: " + filename);
-        System.out.println("Content: " + html);
+    private void generateFile() {
         try (PrintStream ps = new PrintStream(filename)) {
             ps.println(html);
         } catch (FileNotFoundException e) {
@@ -88,11 +94,7 @@ public class HtmlGenerator {
         }
     }
 
-    public Map<String, Integer> getPreKnowledge() {
-        return preKnowledge;
-    }
-
-    public void writePreknowledgeProgressBars() {
+    private void writePreknowledgeProgressBars() {
         html.append("<div class='col-md-4'><div class='panel panel-default'>");
         html.append("<div class='panel-heading'><h3 class='panel-title'>Verteilung der Vorkenntnisse in der Zenturie</h3></div><div class='panel-body'>");
         preKnowledge.entrySet().stream()
@@ -101,4 +103,19 @@ public class HtmlGenerator {
         html.append("</div></div></div>");
 
     }
+
+    private void accumulatePreknowledge(ArrayList<String> vorkenntnisse) {
+        if (vorkenntnisse != null && !vorkenntnisse.isEmpty()) {
+            for (String vorkenntnis : vorkenntnisse) {
+                if (!preKnowledge.containsKey(vorkenntnis.toLowerCase())) {
+                    preKnowledge.put(vorkenntnis.toLowerCase(), 0);
+                }
+                preKnowledge.put(vorkenntnis.toLowerCase(), preKnowledge.get(vorkenntnis.toLowerCase()) + 1);
+            }
+        } else {
+            preKnowledge.put("keine", preKnowledge.get("keine") + 1);
+        }
+    }
+
 }
+

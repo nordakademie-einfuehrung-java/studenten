@@ -3,46 +3,26 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class StudentenAuswertung {
 
-    private static Map<String, HtmlGenerator> htmlFiles = new HashMap<>();
+    private static Yaml yaml = new Yaml();
 
     public static void main(String... args) {
+        Set<Zenturie> zenturien = new HashSet<>();
+
         try {
             Path startPath = Paths.get("zenturien");
             Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
 
-                Yaml yaml = new Yaml();
-                HtmlGenerator generator;
-
-                private void accumulatePreknowledge(ArrayList<String> vorkenntnisse) {
-                    Map<String, Integer> preKnowledge = generator.getPreKnowledge();
-                    if (vorkenntnisse != null && !vorkenntnisse.isEmpty()) {
-                        for (String vorkenntnis : vorkenntnisse) {
-                            if (!preKnowledge.containsKey(vorkenntnis.toLowerCase())) {
-                                preKnowledge.put(vorkenntnis.toLowerCase(), 0);
-                            }
-                            preKnowledge.put(vorkenntnis.toLowerCase(), preKnowledge.get(vorkenntnis.toLowerCase())+1);
-                        }
-                    } else {
-                        preKnowledge.put("keine", preKnowledge.get("keine")+1);
-                    }
-                }
+                Zenturie zenturie;
 
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                     if (!dir.toString().equals("zenturien")) {
-                        String filename = dir.toString()+".html";
-                        if (!htmlFiles.containsKey(filename)) {
-                            generator = new HtmlGenerator(filename);
-                            generator.openHtmlPage(dir.toString());
-                            generator.openTable("Foto", "Name", "Firma", "Vorkenntnisse");
-                            htmlFiles.put(filename, generator);
-                        }
+                        zenturie = new Zenturie(dir);
+                        zenturien.add(zenturie);
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -54,9 +34,8 @@ public class StudentenAuswertung {
                     } else {
                         InputStream stream = new FileInputStream(file.toFile());
                         Map<String, Object> student = (Map<String, Object>) yaml.load(stream);
-                        System.out.println(file.toString() + " -> " + student);
-                        generator.writeStudentAsTableRow(student, file.getFileName().toString());
-                        accumulatePreknowledge((ArrayList<String>) student.get("vorkenntnisse"));
+                        String ymlFilename = file.getFileName().toString();
+                        zenturie.addStudent(new Student(ymlFilename.substring(0, ymlFilename.lastIndexOf(".")), String.valueOf(student.get("name")), String.valueOf(student.get("foto")), String.valueOf(student.get("firma")), (ArrayList<String>) (student.get("vorkenntnisse"))));
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -68,12 +47,6 @@ public class StudentenAuswertung {
 
                 @Override
                 public FileVisitResult postVisitDirectory(Path dir, IOException e) {
-                    if (!dir.toString().equals("zenturien")) {
-                        generator.closeCurrentTable();
-                        generator.writePreknowledgeProgressBars();
-                        generator.closeCurrentHtmlPage();
-                        System.out.println("Vorkenntnisse: " + generator.getPreKnowledge());
-                    }
                     return FileVisitResult.CONTINUE;
                 }
 
@@ -82,8 +55,8 @@ public class StudentenAuswertung {
             e.printStackTrace();
         }
 
-        for (HtmlGenerator htmlFile : htmlFiles.values()) {
-            htmlFile.generateFile();
+        for (Zenturie zenturie : zenturien) {
+            new HtmlGenerator(zenturie).generateZenturienPage();
         }
 
     }
