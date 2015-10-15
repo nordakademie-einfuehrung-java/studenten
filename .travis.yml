@@ -8,3 +8,11 @@ before_install:
 
 script:
   - gradle run
+
+notifications:
+  webhooks:
+    urls:
+    - secure: "hK6PEw/W37K74ciCDmi+tTc2Tpva8WNaeVSgvTX8zte5IT5qRLWnpzED1ndm38M4BMZC+KfH03Em/zBosX/UBRcKaq56IU+xEUcezSnfyOJ1AbQb/cAJWjuPDVjv/ppylw7tTJctEvMaZvi6gqlA2+zHCPgZUmN2632VIrB7naGjhozVOeeePJ37YXtCmNn+GPpLWhC0rOPAM65ZNNJfdRw2/K5cTrQGDZORC9fopbYz5MPUxEL/3dbG10KgyhIZdmp7EVWKZR/H8uRaDZ8ROR32Zuwi8oqLodSYEbCpL2Dy8YD14sd9W90h6o61kBdfXRHp8FkiN/WxYjRHbL9jiViP/r0/pM2vsGQiMaS4PvNGY5N5rrDGuocuJhSbtYRFFFV49lfRQNeRKqU99gbdqLF1rMFE5c+1+2TUMEBwAs0wBxaGaK5IkWA/onVCAifv7KWQL8IKy/raUesWK7nEd2EITl4XwOBfEFgSufVEEpZ2SKmkRI5ZinlTfjmsuEQrQ1gxq13R2bd0rn01QNjAksJwL96H2gE3A8pZt8v3U6KTW7/r9/0cUexF0Hce34skFNQL3KzBhjXRKIGargl3ZcnflOYLAxhe25Ek6TYi6s5RfbdlTnMtyNSh1FdXy0OuZsh5ompm3j1DS9qQm08tfM5ImX05uuQi21c0NZf8CuM="
+    on_success: always
+    on_failure: always
+    on_start: true
