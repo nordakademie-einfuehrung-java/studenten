@@ -8,7 +8,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
-public class ZenturienParser {
+public class StudentenYamlParser {
 
     private static Yaml yaml = new Yaml();
 
