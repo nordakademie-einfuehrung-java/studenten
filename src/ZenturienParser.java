@@ -1,3 +1,6 @@
+import de.nordakademie.github.beans.Student;
+import de.nordakademie.github.beans.Zenturie;
+import de.nordakademie.github.html.HtmlGenerator;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -5,7 +8,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
-public class StudentenAuswertung {
+public class ZenturienParser {
 
     private static Yaml yaml = new Yaml();
 

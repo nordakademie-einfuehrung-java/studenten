@@ -1,3 +1,5 @@
+package de.nordakademie.github.beans;
+
 import java.util.ArrayList;
 
 public class Student implements Comparable<Student> {

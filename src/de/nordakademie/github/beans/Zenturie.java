@@ -1,3 +1,5 @@
+package de.nordakademie.github.beans;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,3 +1,8 @@
+package de.nordakademie.github.html;
+
+import de.nordakademie.github.beans.Student;
+import de.nordakademie.github.beans.Zenturie;
+
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
