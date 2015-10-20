@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class HtmlGenerator {
 
@@ -65,9 +64,7 @@ public class HtmlGenerator {
         StringBuilder ul = new StringBuilder();
         if (items != null && !items.isEmpty()) {
             ul.append("<ul>");
-            for (String item : items) {
-                ul.append("<li>").append(item).append("</li>");
-            }
+            items.stream().forEach(i -> ul.append("<li>").append(i).append("</li>"));
             ul.append("</ul>");
         }
         return ul.toString();
@@ -128,12 +125,7 @@ public class HtmlGenerator {
 
     private void accumulatePreknowledge(ArrayList<String> vorkenntnisse) {
         if (vorkenntnisse != null && !vorkenntnisse.isEmpty()) {
-            for (String vorkenntnis : vorkenntnisse) {
-                if (!preKnowledge.containsKey(vorkenntnis.toLowerCase())) {
-                    preKnowledge.put(vorkenntnis.toLowerCase(), 0);
-                }
-                preKnowledge.put(vorkenntnis.toLowerCase(), preKnowledge.get(vorkenntnis.toLowerCase()) + 1);
-            }
+            vorkenntnisse.stream().forEach(v -> preKnowledge.compute(v.toLowerCase(), (vKey, oldValue) -> oldValue == null ? 1 : oldValue + 1));
         } else {
             preKnowledge.put("keine", preKnowledge.get("keine") + 1);
         }
