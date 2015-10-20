@@ -114,7 +114,16 @@ public class HtmlGenerator {
     }
 
     private String writeProgressBar(String language, Integer numberOfStudentsWithPreknowledge, int totalNumberOfStudents) {
-        return language + " <span class='badge'>" + numberOfStudentsWithPreknowledge + "/" + totalNumberOfStudents + "</span><br>";
+        StringBuilder progressBar = new StringBuilder("<div class='progress'>");
+        progressBar.append("<span>&nbsp;" + language + "</span>");
+        progressBar.append("<div class='progress-bar' role='progressbar' ");
+        progressBar.append("aria-valuenow='" + numberOfStudentsWithPreknowledge + "' ");
+        progressBar.append("aria-valuemin='0' ");
+        progressBar.append("aria-valuemax='" + totalNumberOfStudents + "' ");
+        progressBar.append("style='width: " + (100/totalNumberOfStudents*numberOfStudentsWithPreknowledge) + "%;'>");
+        progressBar.append(numberOfStudentsWithPreknowledge);
+        progressBar.append("</div></div>");
+        return progressBar.toString();
     }
 
     private void accumulatePreknowledge(ArrayList<String> vorkenntnisse) {
