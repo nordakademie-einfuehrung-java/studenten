@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class HtmlGenerator {
 
@@ -104,11 +105,16 @@ public class HtmlGenerator {
     private void writePreknowledgeProgressBars() {
         html.append("<div class='col-md-4'><div class='panel panel-default'>");
         html.append("<div class='panel-heading'><h3 class='panel-title'>Verteilung der Vorkenntnisse in der Zenturie</h3></div><div class='panel-body'>");
+        int numberOfStudents = zenturie.getStudents().size();
         preKnowledge.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .forEach(e -> html.append(e.getKey() + " <span class='badge'>" + e.getValue() + "</span><br>"));
+                .forEach(e -> html.append(writeProgressBar(e.getKey(), e.getValue(), numberOfStudents)));
         html.append("</div></div></div>");
 
+    }
+
+    private String writeProgressBar(String language, Integer numberOfStudentsWithPreknowledge, int totalNumberOfStudents) {
+        return language + " <span class='badge'>" + numberOfStudentsWithPreknowledge + "/" + totalNumberOfStudents + "</span><br>";
     }
 
     private void accumulatePreknowledge(ArrayList<String> vorkenntnisse) {
