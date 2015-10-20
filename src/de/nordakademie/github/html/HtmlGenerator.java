@@ -45,7 +45,7 @@ public class HtmlGenerator {
     }
 
     private void openTable(String... headers) {
-        html.append("<div class='col-md-6'><table class='table table-striped'>");
+        html.append("<div class='col-md-5'><table class='table table-striped'>");
         html.append("<tr>");
         for (String header : headers) {
             html.append("<th>").append(header).append("</th>");
@@ -101,7 +101,7 @@ public class HtmlGenerator {
     }
 
     private void writePreknowledgeProgressBars() {
-        html.append("<div class='col-md-4'><div class='panel panel-default'>");
+        html.append("<div class='col-md-3'><div class='panel panel-default'>");
         html.append("<div class='panel-heading'><h3 class='panel-title'>Verteilung der Vorkenntnisse in der Zenturie</h3></div><div class='panel-body'>");
         preKnowledge.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
