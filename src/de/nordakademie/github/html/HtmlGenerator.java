@@ -37,15 +37,16 @@ public class HtmlGenerator {
     }
 
     private void openHtmlPage(String title) {
-        html.append("<html><title>").append(title).append("</title>");
+        html.append("<!DOCTYPE html><html lang='de'><title>").append(title).append("</title>");
         html.append("<head>");
+        html.append("<meta name='viewport' content='width=device-width, initial-scale=1'>");
         html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>");
         html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css'></head>");
-        html.append("<body>");
+        html.append("<body><div class='container'><div class='row'>");
     }
 
     private void openTable(String... headers) {
-        html.append("<div class='col-md-5'><table class='table table-striped'>");
+        html.append("<div class='col-md-8'><table class='table table-striped'>");
         html.append("<tr>");
         for (String header : headers) {
             html.append("<th>").append(header).append("</th>");
@@ -88,7 +89,7 @@ public class HtmlGenerator {
     }
 
     private void closeCurrentHtmlPage() {
-        html.append("</body></html>");
+        html.append("</div></div></body></html>");
     }
 
     private void generateFile() {
@@ -101,7 +102,7 @@ public class HtmlGenerator {
     }
 
     private void writePreknowledgeProgressBars() {
-        html.append("<div class='col-md-3'><div class='panel panel-default'>");
+        html.append("<div class='col-md-4'><div class='panel panel-default'>");
         html.append("<div class='panel-heading'><h3 class='panel-title'>Verteilung der Vorkenntnisse in der Zenturie</h3></div><div class='panel-body'>");
         preKnowledge.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
