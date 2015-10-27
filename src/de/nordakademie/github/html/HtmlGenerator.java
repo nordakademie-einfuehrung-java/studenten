@@ -1,7 +1,7 @@
 package de.nordakademie.github.html;
 
 import de.nordakademie.github.beans.Student;
-import de.nordakademie.github.beans.Zenturie;
+import de.nordakademie.github.beans.Century;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -12,26 +12,26 @@ import java.util.Map;
 
 public class HtmlGenerator {
 
-    private Zenturie zenturie;
+    private Century century;
     private String filename;
     private StringBuilder html = new StringBuilder();
-    private Map<String, Integer> preKnowledge = new HashMap<>();
+    private Map<String, Integer> experience = new HashMap<>();
 
-    public HtmlGenerator(Zenturie zenturie) {
-        this.zenturie = zenturie;
-        preKnowledge.put("keine", 0);
+    public HtmlGenerator(Century century) {
+        this.century = century;
+        experience.put("keine", 0);
     }
 
-    public void generateZenturienPage() {
-        filename = zenturie.getDirectoryPath().toString() + ".html";
+    public void generateCenturyPage() {
+        filename = century.getDirectoryPath().toString() + ".html";
         openHtmlPage(filename);
         openTable("Foto", "Name", "Firma", "Vorkenntnisse");
-        zenturie.getStudents().stream().sorted().forEach(s -> {
+        century.getStudents().stream().sorted().forEach(s -> {
             writeStudentAsTableRow(s);
-            accumulatePreknowledge(s.getVorkenntnisse());
+            accumulateExperience(s.getExperience());
         });
         closeCurrentTable();
-        writePreknowledgeProgressBars();
+        writeExperienceProgressBars();
         closeCurrentHtmlPage();
         generateFile();
     }
@@ -56,8 +56,8 @@ public class HtmlGenerator {
 
     private void writeStudentAsTableRow(Student student) {
         String name = student.getName() + "<br><a href='https://github.com/" + student.getGithubUser() + "'>@" + student.getGithubUser() + "</a>";
-        String foto = "<img src='" + student.getFoto() + "' width='100' class='img-thumbnail'>";
-        writeRow(foto, name, student.getFirma(), asUnorderedList(student.getVorkenntnisse()));
+        String photo = "<img src='" + student.getPhoto() + "' width='100' class='img-thumbnail'>";
+        writeRow(photo, name, student.getCompany(), asUnorderedList(student.getExperience()));
     }
 
     private String asUnorderedList(ArrayList<String> items) {
@@ -99,11 +99,11 @@ public class HtmlGenerator {
         }
     }
 
-    private void writePreknowledgeProgressBars() {
+    private void writeExperienceProgressBars() {
         html.append("<div class='col-md-4'><div class='panel panel-default'>");
         html.append("<div class='panel-heading'><h3 class='panel-title'>Verteilung der Vorkenntnisse in der Zenturie</h3></div><div class='panel-body'>");
-        int numberOfStudents = zenturie.getStudents().size();
-        preKnowledge.entrySet().stream()
+        int numberOfStudents = century.getStudents().size();
+        experience.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .forEach(e -> html.append(writeProgressBar(e.getKey(), e.getValue(), numberOfStudents)));
         html.append("</div></div></div>");
@@ -123,11 +123,11 @@ public class HtmlGenerator {
         return progressBar.toString();
     }
 
-    private void accumulatePreknowledge(ArrayList<String> vorkenntnisse) {
-        if (vorkenntnisse != null && !vorkenntnisse.isEmpty()) {
-            vorkenntnisse.stream().forEach(v -> preKnowledge.compute(v.toLowerCase(), (vKey, oldValue) -> oldValue == null ? 1 : oldValue + 1));
+    private void accumulateExperience(ArrayList<String> exp) {
+        if (exp != null && !exp.isEmpty()) {
+            exp.stream().forEach(e -> experience.compute(e.toLowerCase(), (vKey, oldValue) -> oldValue == null ? 1 : oldValue + 1));
         } else {
-            preKnowledge.put("keine", preKnowledge.get("keine") + 1);
+            experience.put("keine", experience.get("keine") + 1);
         }
     }
 

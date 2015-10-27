@@ -6,16 +6,16 @@ public class Student implements Comparable<Student> {
 
     private String githubUser;
     private String name;
-    private String foto;
-    private String firma;
-    private ArrayList<String> vorkenntnisse;
+    private String photo;
+    private String company;
+    private ArrayList<String> experience;
 
-    public Student(String githubUser, String name, String foto, String firma, ArrayList<String> vorkenntnisse) {
+    public Student(String githubUser, String name, String photo, String company, ArrayList<String> experience) {
         this.githubUser = githubUser;
         this.name = name;
-        this.foto = foto;
-        this.firma = firma;
-        this.vorkenntnisse = vorkenntnisse;
+        this.photo = photo;
+        this.company = company;
+        this.experience = experience;
     }
 
     public String getGithubUser() {
@@ -26,16 +26,16 @@ public class Student implements Comparable<Student> {
         return name;
     }
 
-    public String getFoto() {
-        return foto;
+    public String getPhoto() {
+        return photo;
     }
 
-    public String getFirma() {
-        return firma;
+    public String getCompany() {
+        return company;
     }
 
-    public ArrayList<String> getVorkenntnisse() {
-        return vorkenntnisse;
+    public ArrayList<String> getExperience() {
+        return experience;
     }
 
     @Override

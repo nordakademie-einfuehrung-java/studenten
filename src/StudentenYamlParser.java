@@ -1,5 +1,5 @@
 import de.nordakademie.github.beans.Student;
-import de.nordakademie.github.beans.Zenturie;
+import de.nordakademie.github.beans.Century;
 import de.nordakademie.github.html.HtmlGenerator;
 import org.yaml.snakeyaml.Yaml;
 
@@ -13,19 +13,19 @@ public class StudentenYamlParser {
     private static Yaml yaml = new Yaml();
 
     public static void main(String... args) {
-        Set<Zenturie> zenturien = new HashSet<>();
+        Set<Century> centuries = new HashSet<>();
 
         try {
             Path startPath = Paths.get("zenturien");
             Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
 
-                Zenturie zenturie;
+                Century century;
 
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                     if (!dir.toString().equals("zenturien")) {
-                        zenturie = new Zenturie(dir);
-                        zenturien.add(zenturie);
+                        century = new Century(dir);
+                        centuries.add(century);
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -38,7 +38,7 @@ public class StudentenYamlParser {
                         InputStream stream = new FileInputStream(file.toFile());
                         Map<String, Object> student = (Map<String, Object>) yaml.load(stream);
                         String ymlFilename = file.getFileName().toString();
-                        zenturie.addStudent(new Student(ymlFilename.substring(0, ymlFilename.lastIndexOf(".")), String.valueOf(student.get("name")), String.valueOf(student.get("foto")), String.valueOf(student.get("firma")), (ArrayList<String>) (student.get("vorkenntnisse"))));
+                        century.addStudent(new Student(ymlFilename.substring(0, ymlFilename.lastIndexOf(".")), String.valueOf(student.get("name")), String.valueOf(student.get("foto")), String.valueOf(student.get("firma")), (ArrayList<String>) (student.get("vorkenntnisse"))));
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -58,8 +58,8 @@ public class StudentenYamlParser {
             e.printStackTrace();
         }
 
-        for (Zenturie zenturie : zenturien) {
-            new HtmlGenerator(zenturie).generateZenturienPage();
+        for (Century century : centuries) {
+            new HtmlGenerator(century).generateCenturyPage();
         }
 
     }

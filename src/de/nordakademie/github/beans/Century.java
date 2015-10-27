@@ -4,13 +4,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zenturie {
+public class Century {
 
     private Path directoryPath;
     private String name;
     private List<Student> students = new ArrayList<>();
 
-    public Zenturie(Path directoryPath) {
+    public Century(Path directoryPath) {
         this.directoryPath = directoryPath;
         String directory = directoryPath.toString();
         this.name = directory.replaceAll("\\\\", "/").substring(directory.lastIndexOf("/")+1);
@@ -37,9 +37,9 @@ public class Zenturie {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Zenturie zenturie = (Zenturie) o;
+        Century century = (Century) o;
 
-        return directoryPath.equals(zenturie.directoryPath);
+        return directoryPath.equals(century.directoryPath);
 
     }
 
