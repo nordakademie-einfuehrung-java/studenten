@@ -1,3 +1,5 @@
+package de.nordakademie.github;
+
 import de.nordakademie.github.beans.Student;
 import de.nordakademie.github.beans.Century;
 import de.nordakademie.github.html.HtmlGenerator;
