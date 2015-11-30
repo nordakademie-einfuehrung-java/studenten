@@ -20,7 +20,7 @@ sourceSets {
 }
 
 dependencies {
-    compile 'org.yaml:snakeyaml:1.13'
+    compile 'org.yaml:snakeyaml:1.14'
 }
 
 mainClassName = 'de.nordakademie.github.StudentenYamlParser'
