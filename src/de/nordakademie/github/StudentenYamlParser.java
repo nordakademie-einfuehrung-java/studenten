@@ -36,7 +36,7 @@ public class StudentenYamlParser {
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (file.toString().endsWith(".html")) {
                         Files.delete(file);
-                    } else {
+                    } else if (file.toString().endsWith(".yml") || file.toString().endsWith(".yaml")) {
                         InputStream stream = new FileInputStream(file.toFile());
                         Map<String, Object> student = (Map<String, Object>) yaml.load(stream);
                         String ymlFilename = file.getFileName().toString();

@@ -117,7 +117,7 @@ public class HtmlGenerator {
         progressBar.append("aria-valuenow='" + numberOfStudentsWithPreknowledge + "' ");
         progressBar.append("aria-valuemin='0' ");
         progressBar.append("aria-valuemax='" + totalNumberOfStudents + "' ");
-        progressBar.append("style='width: " + (100/totalNumberOfStudents*numberOfStudentsWithPreknowledge) + "%;'>");
+        progressBar.append("style='width: " + (totalNumberOfStudents*numberOfStudentsWithPreknowledge > 0 ? 100/(totalNumberOfStudents*numberOfStudentsWithPreknowledge) : 0) + "%;'>");
         progressBar.append(numberOfStudentsWithPreknowledge);
         progressBar.append("</div></div>");
         return progressBar.toString();
