@@ -23,4 +23,4 @@ dependencies {
     compile 'org.yaml:snakeyaml:1.17'
 }
 
-mainClassName = 'de.nordakademie.github.StudentenYamlParser'
+mainClassName = 'de.nordakademie.github.StudentYamlParser'

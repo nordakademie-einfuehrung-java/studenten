@@ -40,8 +40,8 @@ public class HtmlGenerator {
         html.append("<!DOCTYPE html><html lang='de'><title>").append(title).append("</title>");
         html.append("<head>");
         html.append("<meta name='viewport' content='width=device-width, initial-scale=1'>");
-        html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>");
-        html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css'></head>");
+        html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>");
+        html.append("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css'></head>");
         html.append("<body><div class='container'><div class='row'>");
     }
 
@@ -117,7 +117,7 @@ public class HtmlGenerator {
         progressBar.append("aria-valuenow='" + numberOfStudentsWithPreknowledge + "' ");
         progressBar.append("aria-valuemin='0' ");
         progressBar.append("aria-valuemax='" + totalNumberOfStudents + "' ");
-        progressBar.append("style='width: " + (totalNumberOfStudents*numberOfStudentsWithPreknowledge > 0 ? 100/(totalNumberOfStudents*numberOfStudentsWithPreknowledge) : 0) + "%;'>");
+        progressBar.append("style='width: " + (totalNumberOfStudents*numberOfStudentsWithPreknowledge > 0 ? (100L/totalNumberOfStudents)*numberOfStudentsWithPreknowledge : 0) + "%; min-width: 2em;'>");
         progressBar.append(numberOfStudentsWithPreknowledge);
         progressBar.append("</div></div>");
         return progressBar.toString();

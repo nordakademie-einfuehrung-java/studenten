@@ -10,7 +10,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
-public class StudentenYamlParser {
+public class StudentYamlParser {
 
     private static Yaml yaml = new Yaml();
 
